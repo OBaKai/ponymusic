@@ -8,6 +8,8 @@ import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +64,15 @@ public class AppCache {
         mLocalMusicMap.putAll(map);
 
         mLocalMusicPathList.clear();
-        mLocalMusicPathList.addAll(map.keySet());
+        List<String> list = new ArrayList<>(map.keySet());
+        //路径名称排序
+        Collections.sort(list, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o1.compareTo(o2);
+            }
+        });
+        mLocalMusicPathList.addAll(list);
     }
 
     public Map<String, List<Music>> getLocalMusicList() {

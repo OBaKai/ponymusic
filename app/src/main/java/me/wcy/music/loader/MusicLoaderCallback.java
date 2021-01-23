@@ -9,7 +9,10 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.webkit.ValueCallback;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,6 +104,18 @@ public class MusicLoaderCallback implements LoaderManager.LoaderCallbacks {
                 musicMap.put(folderPath, list);
             }
         }
+
+        //文件按名称 - 排序
+        for (String path : musicMap.keySet()){
+            List<Music> list = musicMap.get(path);
+            Collections.sort(list, new Comparator<Music>() {
+                @Override
+                public int compare(Music o1, Music o2) {
+                    return o1.getPath().compareTo(o2.getPath());
+                }
+            });
+        }
+
 
         callback.onReceiveValue(musicMap);
     }

@@ -77,4 +77,5 @@ dependencies {
     implementation 'me.wcy:lrcview:2.2'
     implementation 'com.hwangjr.rxbus:rxbus:2.0.0'
     implementation 'org.greenrobot:greendao:3.2.2'
+    api "com.squareup.okhttp3:okhttp:3.12.0"
 }

@@ -17,9 +17,9 @@
             android:id="@+id/action_exit"
             android:icon="@drawable/ic_menu_exit"
             android:title="@string/menu_exit" />
-        <item
-            android:id="@+id/action_about"
-            android:icon="@drawable/ic_menu_about"
-            android:title="@string/menu_about" />
+<!--        <item-->
+<!--            android:id="@+id/action_about"-->
+<!--            android:icon="@drawable/ic_menu_about"-->
+<!--            android:title="@string/menu_about" />-->
     </group>
 </menu>

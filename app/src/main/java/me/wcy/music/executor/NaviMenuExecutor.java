@@ -40,9 +40,9 @@ public class NaviMenuExecutor {
                 activity.finish();
                 PlayService.startCommand(activity, Actions.ACTION_STOP);
                 return true;
-            case R.id.action_about:
-                startActivity(AboutActivity.class);
-                return true;
+//            case R.id.action_about:
+//                startActivity(AboutActivity.class);
+//                return true;
         }
         return false;
     }

@@ -1,11 +1,15 @@
 package me.wcy.music.fragment;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +17,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +30,11 @@ import com.hwangjr.rxbus.annotation.Subscribe;
 import com.hwangjr.rxbus.annotation.Tag;
 
 import java.io.File;
+import java.util.List;
 
 import me.wcy.music.R;
-import me.wcy.music.activity.MusicInfoActivity;
+import me.wcy.music.adapter.MusicPathAdapter;
 import me.wcy.music.adapter.OnMoreClickListener;
-import me.wcy.music.adapter.PlaylistAdapter;
 import me.wcy.music.application.AppCache;
 import me.wcy.music.constants.Keys;
 import me.wcy.music.constants.RequestCode;
@@ -52,7 +57,7 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
     private TextView vSearching;
 
     private Loader<Cursor> loader;
-    private PlaylistAdapter adapter;
+    private MusicPathAdapter adapter;
 
     @Nullable
     @Override
@@ -65,7 +70,7 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new PlaylistAdapter(AppCache.get().getLocalMusicList());
+        adapter = new MusicPathAdapter(AppCache.get().getLocalMusicPathList());
         adapter.setOnMoreClickListener(this);
         lvLocalMusic.setAdapter(adapter);
         loadMusic();
@@ -94,8 +99,7 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
 
     private void initLoader() {
         loader = getActivity().getLoaderManager().initLoader(0, null, new MusicLoaderCallback(getContext(), value -> {
-            AppCache.get().getLocalMusicList().clear();
-            AppCache.get().getLocalMusicList().addAll(value);
+            AppCache.get().updateLocalMusicList(value);
             lvLocalMusic.setVisibility(View.VISIBLE);
             vSearching.setVisibility(View.GONE);
             adapter.notifyDataSetChanged();
@@ -116,33 +120,63 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Music music = AppCache.get().getLocalMusicList().get(position);
-        AudioPlayer.get().addAndPlay(music);
-        ToastUtils.show("已添加到播放列表");
-    }
+        String path = AppCache.get().getLocalMusicPathList().get(position);
 
-    @Override
-    public void onMoreClick(final int position) {
-        Music music = AppCache.get().getLocalMusicList().get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-        dialog.setTitle(music.getTitle());
-        dialog.setItems(R.array.local_music_dialog, (dialog1, which) -> {
+        dialog.setTitle(path);
+        dialog.setItems(R.array.local_music_path_dialog, (dialog1, which) -> {
             switch (which) {
-                case 0:// 分享
-                    shareMusic(music);
+                case 0:// 复制
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        copy(path);
+                    }
                     break;
-                case 1:// 设为铃声
-                    requestSetRingtone(music);
-                    break;
-                case 2:// 查看歌曲信息
-                    MusicInfoActivity.start(getContext(), music);
-                    break;
-                case 3:// 删除
-                    deleteMusic(music);
+                case 1:// 跳转
+                    dialog1.dismiss();
+
+                    List<Music> list = AppCache.get().getLocalMusicList().get(path);
+                    AlertDialog.Builder d = new AlertDialog.Builder(getContext());
+                    String[] arr = new String[list.size()];
+                    for (int i = 0; i < list.size(); i++){
+                        arr[i] = list.get(i).getFileName();
+                    }
+                    d.setItems(arr, null);
+                    d.show();
                     break;
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public void onMoreClick(final int position) {
+        ToastUtils.show("已添加到播放列表");
+
+        String path = AppCache.get().getLocalMusicPathList().get(position);
+        List<Music> list = AppCache.get().getLocalMusicList().get(path);
+        AudioPlayer.get().addAllAndClearOldList(list, true);
+    }
+
+    /**
+     * 复制内容到剪切板
+     *
+     * @param copyStr -
+     * @return -
+     */
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private boolean copy(String copyStr) {
+        try {
+            //获取剪贴板管理器
+            ClipboardManager cm = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            // 创建普通字符型ClipData
+            ClipData mClipData = ClipData.newPlainText("Label", copyStr);
+            // 将ClipData内容放到系统剪贴板里。
+            cm.setPrimaryClip(mClipData);
+            ToastUtils.show("复制成功");
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**

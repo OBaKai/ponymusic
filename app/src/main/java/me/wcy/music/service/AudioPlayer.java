@@ -83,6 +83,31 @@ public class AudioPlayer {
         listeners.remove(listener);
     }
 
+    public void addAllAndClearOldList(List<Music> list, boolean isPlayFirst){
+        if (isPlaying() || isPreparing()){
+            stopPlayer();
+            for (OnPlayerEventListener listener : listeners) {
+                listener.onChange(getPlayMusic());
+            }
+        }
+
+        musicList.clear();
+        DBManager.get().getMusicDao().deleteAll();
+
+        musicList.addAll(list);
+        if (isPlayFirst){
+            play(0);
+        }
+        DBManager.get().getMusicDao().getSession().runInTx(new Runnable() {
+            @Override
+            public void run() {
+                for (Music m : list){
+                    DBManager.get().getMusicDao().insert(m);
+                }
+            }
+        });
+    }
+
     public void addAndPlay(Music music) {
         int position = musicList.indexOf(music);
         if (position < 0) {

@@ -10,7 +10,9 @@ import android.provider.MediaStore;
 import android.webkit.ValueCallback;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import me.wcy.music.model.Music;
 import me.wcy.music.storage.preference.Preferences;
@@ -19,14 +21,15 @@ import me.wcy.music.utils.ParseUtils;
 import me.wcy.music.utils.SystemUtils;
 
 public class MusicLoaderCallback implements LoaderManager.LoaderCallbacks {
-    private final List<Music> musicList;
     private final Context context;
-    private final ValueCallback<List<Music>> callback;
+    private final ValueCallback<Map<String, List<Music>>> callback;
 
-    public MusicLoaderCallback(Context context, ValueCallback<List<Music>> callback) {
+    private final Map<String, List<Music>> musicMap; //分文件夹存储音乐列表
+
+    public MusicLoaderCallback(Context context, ValueCallback<Map<String, List<Music>>> callback) {
         this.context = context;
         this.callback = callback;
-        this.musicList = new ArrayList<>();
+        this.musicMap = new HashMap<>();
     }
 
     public Loader onCreateLoader(int id, Bundle args) {
@@ -48,8 +51,8 @@ public class MusicLoaderCallback implements LoaderManager.LoaderCallbacks {
         long filterTime = ParseUtils.parseLong(Preferences.getFilterTime()) * 1000;
         long filterSize = ParseUtils.parseLong(Preferences.getFilterSize()) * 1024;
 
-        int counter = 0;
-        musicList.clear();
+        //int counter = 0;
+        musicMap.clear();
         while (data.moveToNext()) {
             // 是否为音乐，魅族手机上始终为0
             int isMusic = data.getInt(data.getColumnIndex(MediaStore.Audio.AudioColumns.IS_MUSIC));
@@ -84,13 +87,21 @@ public class MusicLoaderCallback implements LoaderManager.LoaderCallbacks {
             music.setPath(path);
             music.setFileName(fileName);
             music.setFileSize(fileSize);
-            if (++counter <= 20) {
-                // 只加载前20首的缩略图
-                CoverLoader.get().loadThumb(music);
+//            if (++counter <= 20) {
+//                // 只加载前20首的缩略图
+//                CoverLoader.get().loadThumb(music);
+//            }
+
+            String folderPath = path.replace("/" + fileName, "");
+            if (musicMap.containsKey(folderPath)){
+                musicMap.get(folderPath).add(music);
+            }else {
+                List<Music> list = new ArrayList<>();
+                list.add(music);
+                musicMap.put(folderPath, list);
             }
-            musicList.add(music);
         }
 
-        callback.onReceiveValue(musicList);
+        callback.onReceiveValue(musicMap);
     }
 }

@@ -8,7 +8,10 @@ import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import me.wcy.music.executor.DownloadMusicInfo;
 import me.wcy.music.model.Music;
@@ -23,7 +26,8 @@ import me.wcy.music.utils.ToastUtils;
  */
 public class AppCache {
     private Context mContext;
-    private final List<Music> mLocalMusicList = new ArrayList<>();
+    private final Map<String, List<Music>> mLocalMusicMap = new HashMap<>();
+    private final List<String> mLocalMusicPathList = new ArrayList<>();
     private final List<SheetInfo> mSheetList = new ArrayList<>();
     private final List<Activity> mActivityStack = new ArrayList<>();
     private final LongSparseArray<DownloadMusicInfo> mDownloadList = new LongSparseArray<>();
@@ -53,8 +57,20 @@ public class AppCache {
         return mContext;
     }
 
-    public List<Music> getLocalMusicList() {
-        return mLocalMusicList;
+    public void updateLocalMusicList(Map<String, List<Music>> map){
+        mLocalMusicMap.clear();
+        mLocalMusicMap.putAll(map);
+
+        mLocalMusicPathList.clear();
+        mLocalMusicPathList.addAll(map.keySet());
+    }
+
+    public Map<String, List<Music>> getLocalMusicList() {
+        return mLocalMusicMap;
+    }
+
+    public List<String> getLocalMusicPathList(){
+        return mLocalMusicPathList;
     }
 
     public List<SheetInfo> getSheetList() {

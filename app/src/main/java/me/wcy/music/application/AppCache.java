@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.v4.util.LongSparseArray;
 import android.util.Log;
 
-import com.amap.api.location.AMapLocalWeatherLive;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,6 @@ public class AppCache {
     private final List<SheetInfo> mSheetList = new ArrayList<>();
     private final List<Activity> mActivityStack = new ArrayList<>();
     private final LongSparseArray<DownloadMusicInfo> mDownloadList = new LongSparseArray<>();
-    private AMapLocalWeatherLive mAMapLocalWeatherLive;
 
     private AppCache() {
     }
@@ -77,14 +74,6 @@ public class AppCache {
 
     public LongSparseArray<DownloadMusicInfo> getDownloadList() {
         return mDownloadList;
-    }
-
-    public AMapLocalWeatherLive getAMapLocalWeatherLive() {
-        return mAMapLocalWeatherLive;
-    }
-
-    public void setAMapLocalWeatherLive(AMapLocalWeatherLive aMapLocalWeatherLive) {
-        mAMapLocalWeatherLive = aMapLocalWeatherLive;
     }
 
     private class ActivityLifecycle implements Application.ActivityLifecycleCallbacks {

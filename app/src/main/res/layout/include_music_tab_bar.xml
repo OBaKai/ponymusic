@@ -29,16 +29,6 @@
             android:text="@string/local_music"
             android:textColor="@drawable/music_tab_bar_text_color_selector"
             android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/tv_online_music"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="30dp"
-            android:gravity="center"
-            android:text="@string/online_music"
-            android:textColor="@drawable/music_tab_bar_text_color_selector"
-            android:textSize="15sp" />
     </LinearLayout>
 
     <ImageView

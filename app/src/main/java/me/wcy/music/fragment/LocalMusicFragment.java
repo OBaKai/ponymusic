@@ -76,6 +76,15 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
         loadMusic();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (loader != null){
+            getActivity().getLoaderManager().destroyLoader(loader.getId());
+            loader = null;
+        }
+    }
+
     private void loadMusic() {
         lvLocalMusic.setVisibility(View.GONE);
         vSearching.setVisibility(View.VISIBLE);
@@ -98,7 +107,7 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
     }
 
     private void initLoader() {
-        loader = getActivity().getLoaderManager().initLoader(0, null, new MusicLoaderCallback(getContext(), value -> {
+        loader = getActivity().getLoaderManager().initLoader(9527, null, new MusicLoaderCallback(getContext(), value -> {
             AppCache.get().updateLocalMusicList(value);
             lvLocalMusic.setVisibility(View.VISIBLE);
             vSearching.setVisibility(View.GONE);

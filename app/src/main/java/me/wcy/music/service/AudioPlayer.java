@@ -84,11 +84,9 @@ public class AudioPlayer {
     }
 
     public void addAllAndClearOldList(List<Music> list, boolean isPlayFirst){
-        if (isPlaying() || isPreparing()){
-            stopPlayer();
-            for (OnPlayerEventListener listener : listeners) {
-                listener.onChange(getPlayMusic());
-            }
+        stopPlayer();
+        for (OnPlayerEventListener listener : listeners) {
+            listener.onChange(getPlayMusic());
         }
 
         musicList.clear();

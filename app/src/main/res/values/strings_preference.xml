@@ -5,4 +5,6 @@
     <string name="setting_key_sound_effect">sound_effect</string>
     <string name="setting_key_filter_size">filter_size</string>
     <string name="setting_key_filter_time">filter_time</string>
+
+    <string name="setting_key_add_is_play">add_is_play</string>
 </resources>

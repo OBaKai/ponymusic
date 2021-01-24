@@ -18,14 +18,9 @@ import me.wcy.music.utils.binding.ViewBinder;
  */
 public class MusicPathAdapter extends BaseAdapter {
     private List<String> pathList;
-    private OnMoreClickListener listener;
 
     public MusicPathAdapter(List<String> list) {
         this.pathList = list;
-    }
-
-    public void setOnMoreClickListener(OnMoreClickListener listener) {
-        this.listener = listener;
     }
 
     @Override
@@ -54,11 +49,6 @@ public class MusicPathAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tvTitle.setText(pathList.get(position));
-        holder.ivAdd.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
-            }
-        });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);
         return convertView;
     }
@@ -70,8 +60,6 @@ public class MusicPathAdapter extends BaseAdapter {
     private static class ViewHolder {
         @Bind(R.id.tv_title)
         private TextView tvTitle;
-        @Bind(R.id.iv_add)
-        private ImageView ivAdd;
         @Bind(R.id.v_divider)
         private View vDivider;
 

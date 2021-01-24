@@ -8,8 +8,9 @@
     </string-array>
 
     <string-array name="local_music_path_dialog">
+        <item>添加到播放列表</item>
+        <item>查看列表</item>
         <item>复制路径</item>
-        <item>查看歌曲列表</item>
     </string-array>
 
     <string-array name="online_music_dialog">

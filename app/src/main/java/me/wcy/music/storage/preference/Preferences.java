@@ -59,6 +59,10 @@ public class Preferences {
         return getBoolean(sContext.getString(R.string.setting_key_mobile_network_download), false);
     }
 
+    public static boolean isAddListPlay() {
+        return getBoolean(sContext.getString(R.string.setting_key_add_is_play), false);
+    }
+
     public static boolean isNightMode() {
         return getBoolean(NIGHT_MODE, false);
     }

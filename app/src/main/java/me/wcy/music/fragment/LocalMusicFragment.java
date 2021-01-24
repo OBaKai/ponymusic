@@ -42,6 +42,7 @@ import me.wcy.music.constants.RxBusTags;
 import me.wcy.music.loader.MusicLoaderCallback;
 import me.wcy.music.model.Music;
 import me.wcy.music.service.AudioPlayer;
+import me.wcy.music.storage.preference.Preferences;
 import me.wcy.music.utils.PermissionReq;
 import me.wcy.music.utils.ToastUtils;
 import me.wcy.music.utils.binding.Bind;
@@ -50,7 +51,7 @@ import me.wcy.music.utils.binding.Bind;
  * 本地音乐列表
  * Created by wcy on 2015/11/26.
  */
-public class LocalMusicFragment extends BaseFragment implements AdapterView.OnItemClickListener, OnMoreClickListener {
+public class LocalMusicFragment extends BaseFragment implements AdapterView.OnItemClickListener{
     @Bind(R.id.lv_local_music)
     private ListView lvLocalMusic;
     @Bind(R.id.v_searching)
@@ -71,7 +72,6 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
         super.onActivityCreated(savedInstanceState);
 
         adapter = new MusicPathAdapter(AppCache.get().getLocalMusicPathList());
-        adapter.setOnMoreClickListener(this);
         lvLocalMusic.setAdapter(adapter);
         loadMusic();
     }
@@ -126,35 +126,31 @@ public class LocalMusicFragment extends BaseFragment implements AdapterView.OnIt
         dialog.setTitle(path);
         dialog.setItems(R.array.local_music_path_dialog, (dialog1, which) -> {
             switch (which) {
-                case 0:// 复制
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        copy(path);
-                    }
+                case 0: //添加到播放列表
+                    AudioPlayer.get().addAllAndClearOldList(
+                            AppCache.get().getLocalMusicList().get(path),
+                            Preferences.isAddListPlay());
+                    ToastUtils.show("已添加到播放列表");
                     break;
-                case 1:// 跳转
+                case 1:// 查看文件夹中所有歌曲名称
                     dialog1.dismiss();
-
-                    List<Music> list = AppCache.get().getLocalMusicList().get(path);
+                    List<Music> ml = AppCache.get().getLocalMusicList().get(path);
                     AlertDialog.Builder d = new AlertDialog.Builder(getContext());
-                    String[] arr = new String[list.size()];
-                    for (int i = 0; i < list.size(); i++){
-                        arr[i] = list.get(i).getFileName();
+                    String[] arr = new String[ml.size()];
+                    for (int i = 0; i < ml.size(); i++){
+                        arr[i] = ml.get(i).getFileName();
                     }
                     d.setItems(arr, null);
                     d.show();
                     break;
+                case 2:// 复制
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        copy(path);
+                    }
+                    break;
             }
         });
         dialog.show();
-    }
-
-    @Override
-    public void onMoreClick(final int position) {
-        ToastUtils.show("已添加到播放列表");
-
-        String path = AppCache.get().getLocalMusicPathList().get(position);
-        List<Music> list = AppCache.get().getLocalMusicList().get(path);
-        AudioPlayer.get().addAllAndClearOldList(list, true);
     }
 
     /**

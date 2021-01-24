@@ -39,5 +39,7 @@
         android:background="@drawable/btn_action_bg_selector"
         android:contentDescription="@null"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_menu_search" />
+        android:src="@drawable/ic_menu_search"
+        android:visibility="invisible"
+        />
 </FrameLayout>

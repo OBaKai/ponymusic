@@ -17,13 +17,16 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("wangchenyan.keystore")
-            storePassword getLocalValue("STORE_PASSWORD")
-            keyAlias getLocalValue("KEY_ALIAS")
-            keyPassword getLocalValue("KEY_PASSWORD")
+            storeFile file("JJLeong.jks")
+            storePassword "1937456"
+            keyAlias "JJLeong"
+            keyPassword "1937456"
         }
         debug {
-            storeFile file("debug.keystore")
+            storeFile file("JJLeong.jks")
+            storePassword "1937456"
+            keyAlias "JJLeong"
+            keyPassword "1937456"
         }
     }
 

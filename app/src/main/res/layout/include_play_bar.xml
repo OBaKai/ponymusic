@@ -51,6 +51,13 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/iv_play_bar_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_play_bar_btn_prev" />
+
+        <ImageView
             android:id="@+id/iv_play_bar_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

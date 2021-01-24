@@ -31,6 +31,8 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
     private ImageView ivPlayBarPlay;
     @Bind(R.id.iv_play_bar_next)
     private ImageView ivPlayBarNext;
+    @Bind(R.id.iv_play_bar_prev)
+    private ImageView ivPlayBarPrev;
     @Bind(R.id.v_play_bar_playlist)
     private ImageView vPlayBarPlaylist;
     @Bind(R.id.pb_play_bar)
@@ -40,6 +42,7 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
         ViewBinder.bind(this, view);
         ivPlayBarPlay.setOnClickListener(this);
         ivPlayBarNext.setOnClickListener(this);
+        ivPlayBarPrev.setOnClickListener(this);
         vPlayBarPlaylist.setOnClickListener(this);
         onChange(AudioPlayer.get().getPlayMusic());
     }
@@ -49,6 +52,9 @@ public class ControlPanel implements View.OnClickListener, OnPlayerEventListener
         switch (v.getId()) {
             case R.id.iv_play_bar_play:
                 AudioPlayer.get().playPause();
+                break;
+            case R.id.iv_play_bar_prev:
+                AudioPlayer.get().prev();
                 break;
             case R.id.iv_play_bar_next:
                 AudioPlayer.get().next();

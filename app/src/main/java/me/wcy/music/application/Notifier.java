@@ -112,25 +112,41 @@ public class Notifier {
         remoteViews.setImageViewResource(R.id.iv_next, getNextIconRes(isLightNotificationTheme));
         remoteViews.setOnClickPendingIntent(R.id.iv_next, nextPendingIntent);
 
+        Intent prevIntent = new Intent(StatusBarReceiver.ACTION_STATUS_BAR);
+        prevIntent.putExtra(StatusBarReceiver.EXTRA, StatusBarReceiver.EXTRA_PREV);
+        PendingIntent prevPendingIntent = PendingIntent.getBroadcast(context, 1, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setImageViewResource(R.id.iv_prev, getPrevIconRes(isLightNotificationTheme));
+        remoteViews.setOnClickPendingIntent(R.id.iv_prev, prevPendingIntent);
+
         return remoteViews;
     }
 
     private int getPlayIconRes(boolean isLightNotificationTheme, boolean isPlaying) {
         if (isPlaying) {
-            return isLightNotificationTheme
-                    ? R.drawable.ic_status_bar_pause_dark_selector
-                    : R.drawable.ic_status_bar_pause_light_selector;
+//            return isLightNotificationTheme
+//                    ? R.drawable.ic_status_bar_pause_dark_selector
+//                    : R.drawable.ic_status_bar_pause_light_selector;
+            return R.drawable.ic_play_bar_btn_pause;
         } else {
-            return isLightNotificationTheme
-                    ? R.drawable.ic_status_bar_play_dark_selector
-                    : R.drawable.ic_status_bar_play_light_selector;
+//            return isLightNotificationTheme
+//                    ? R.drawable.ic_status_bar_play_dark_selector
+//                    : R.drawable.ic_status_bar_play_light_selector;
+            return R.drawable.ic_play_bar_btn_play;
         }
     }
 
     private int getNextIconRes(boolean isLightNotificationTheme) {
-        return isLightNotificationTheme
-                ? R.drawable.ic_status_bar_next_dark_selector
-                : R.drawable.ic_status_bar_next_light_selector;
+//        return isLightNotificationTheme
+//                ? R.drawable.ic_status_bar_next_dark_selector
+//                : R.drawable.ic_status_bar_next_light_selector;
+        return R.drawable.ic_play_bar_btn_next;
+    }
+
+    private int getPrevIconRes(boolean isLightNotificationTheme) {
+//        return isLightNotificationTheme
+//                ? R.drawable.ic_status_bar_next_dark_selector
+//                : R.drawable.ic_status_bar_next_light_selector;
+        return R.drawable.ic_play_bar_btn_prev;
     }
 
     private boolean isLightNotificationTheme(Context context) {

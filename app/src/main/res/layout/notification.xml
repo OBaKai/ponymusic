@@ -48,12 +48,20 @@
         android:paddingLeft="10.0dp">
 
         <ImageView
+            android:id="@+id/iv_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:contentDescription="@null"
+            android:scaleType="center"
+            android:src="@drawable/ic_play_bar_btn_prev" />
+
+        <ImageView
             android:id="@+id/iv_play_pause"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:contentDescription="@null"
             android:scaleType="center"
-            android:src="@drawable/ic_status_bar_pause_dark" />
+            android:src="@drawable/ic_play_bar_btn_play" />
 
         <ImageView
             android:id="@+id/iv_next"
@@ -61,6 +69,6 @@
             android:layout_height="fill_parent"
             android:contentDescription="@null"
             android:scaleType="center"
-            android:src="@drawable/ic_status_bar_next_dark" />
+            android:src="@drawable/ic_play_bar_btn_next" />
     </LinearLayout>
 </LinearLayout>

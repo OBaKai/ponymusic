@@ -14,6 +14,7 @@ public class StatusBarReceiver extends BroadcastReceiver {
     public static final String ACTION_STATUS_BAR = "me.wcy.music.STATUS_BAR_ACTIONS";
     public static final String EXTRA = "extra";
     public static final String EXTRA_NEXT = "next";
+    public static final String EXTRA_PREV = "prev";
     public static final String EXTRA_PLAY_PAUSE = "play_pause";
 
     @Override
@@ -25,7 +26,11 @@ public class StatusBarReceiver extends BroadcastReceiver {
         String extra = intent.getStringExtra(EXTRA);
         if (TextUtils.equals(extra, EXTRA_NEXT)) {
             AudioPlayer.get().next();
-        } else if (TextUtils.equals(extra, EXTRA_PLAY_PAUSE)) {
+        }
+        else if (TextUtils.equals(extra, EXTRA_PREV)){
+            AudioPlayer.get().prev();
+        }
+        else if (TextUtils.equals(extra, EXTRA_PLAY_PAUSE)) {
             AudioPlayer.get().playPause();
         }
     }
